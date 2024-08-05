@@ -65,7 +65,7 @@ class AwnerServices {
                     id: isAwner.id,
                     email: isAwner.email,
                 };
-                const Authorization = yield this.jwt.generetaJWT(payload);
+                const Authorization = this.jwt.generetaJWT(payload);
                 return Object.assign(Object.assign({}, payload), { Authorization });
             }
             return null;

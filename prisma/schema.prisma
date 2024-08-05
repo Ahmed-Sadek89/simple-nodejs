@@ -24,64 +24,64 @@ model colors_setting {
   color2     String @unique @db.VarChar(20)
 }
 
-model Awner {
+model awner {
   id       Int    @id @default(autoincrement())
-  email    String @unique
+  email    String @unique(map: "Awner_email_key")
   password String
 }
 
-model Awner_info {
+model awner_info {
   id          Int    @id @default(autoincrement())
-  name        String @unique @db.VarChar(30)
-  email       String @unique @db.VarChar(40)
-  description String @unique @db.VarChar(255)
-  image       String @unique @db.VarChar(255)
+  name        String @unique(map: "Awner_info_name_key") @db.VarChar(30)
+  email       String @unique(map: "Awner_info_email_key") @db.VarChar(40)
+  description String @unique(map: "Awner_info_description_key") @db.VarChar(255)
+  image       String @unique(map: "Awner_info_image_key") @db.VarChar(255)
 }
 
-model Category_projects {
+model category_projects {
   id            Int        @id @default(autoincrement())
-  category_name String     @unique @db.VarChar(60)
-  Projects      Projects[]
+  category_name String     @unique(map: "Category_projects_category_name_key") @db.VarChar(60)
+  projects      projects[]
 }
 
-model Category_skills {
+model category_skills {
   id            Int      @id @default(autoincrement())
-  category_name String   @unique @db.VarChar(50)
-  Skills        Skills[]
+  category_name String   @unique(map: "Category_skills_category_name_key") @db.VarChar(50)
+  skills        skills[]
 }
 
-model Links {
+model links {
   id    Int    @id @default(autoincrement())
-  title String @unique @db.VarChar(30)
-  link  String @unique @db.VarChar(255)
+  title String @unique(map: "Links_title_key") @db.VarChar(30)
+  link  String @unique(map: "Links_link_key") @db.VarChar(255)
   icon  String @db.VarChar(255)
   type  String @db.VarChar(40)
 }
 
-model Messages {
+model messages {
   id         Int     @id @default(autoincrement())
   subject    String  @db.VarChar(70)
   message    String  @db.VarChar(255)
   visitor_id String
-  Visitor    Visitor @relation(fields: [visitor_id], references: [id])
+  visitor    visitor @relation(fields: [visitor_id], references: [id], map: "Messages_visitor_id_fkey")
 
   @@index([visitor_id], map: "Messages_visitor_id_fkey")
 }
 
-model Project_notes {
+model project_notes {
   id         Int      @id @default(autoincrement())
   notes      String   @db.VarChar(255)
   react      String   @db.VarChar(10)
   project_id Int
   visitor_id String
-  Projects   Projects @relation(fields: [project_id], references: [id])
-  Visitor    Visitor  @relation(fields: [visitor_id], references: [id])
+  projects   projects @relation(fields: [project_id], references: [id], map: "Project_notes_project_id_fkey")
+  visitor    visitor  @relation(fields: [visitor_id], references: [id], map: "Project_notes_visitor_id_fkey")
 
   @@index([project_id], map: "Project_notes_project_id_fkey")
   @@index([visitor_id], map: "Project_notes_visitor_id_fkey")
 }
 
-model Projects {
+model projects {
   id                  Int               @id @default(autoincrement())
   title               String            @db.VarChar(30)
   description         String            @db.VarChar(255)
@@ -92,28 +92,28 @@ model Projects {
   ended_at            String            @db.VarChar(30)
   attachment          String            @db.VarChar(255)
   category_project_id Int
-  Project_notes       Project_notes[]
-  Category_projects   Category_projects @relation(fields: [category_project_id], references: [id])
+  project_notes       project_notes[]
+  category_projects   category_projects @relation(fields: [category_project_id], references: [id], map: "Projects_category_project_id_fkey")
 
   @@index([category_project_id], map: "Projects_category_project_id_fkey")
 }
 
-model Skills {
+model skills {
   id              Int             @id @default(autoincrement())
   title           String          @db.VarChar(20)
   icon            String          @db.VarChar(255)
   category_id     Int
-  Category_skills Category_skills @relation(fields: [category_id], references: [id])
+  category_skills category_skills @relation(fields: [category_id], references: [id], map: "Skills_category_id_fkey")
 
   @@index([category_id], map: "Skills_category_id_fkey")
 }
 
-model Visitor {
+model visitor {
   id            String          @id
   name          String          @db.VarChar(30)
   email         String          @db.VarChar(40)
   image         String          @db.VarChar(255)
   login_by      String          @db.VarChar(20)
-  Messages      Messages[]
-  Project_notes Project_notes[]
+  messages      messages[]
+  project_notes project_notes[]
 }
