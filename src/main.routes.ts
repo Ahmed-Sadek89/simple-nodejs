@@ -1,5 +1,5 @@
 import express from 'express';
-import AwnerRouters from './routes/Awner.routes';
+import AwnerRouters from './routes/Awner.routes'
 
 
 const root = express()
