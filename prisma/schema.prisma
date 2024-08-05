@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model phones {
+  id    Int    @id @default(autoincrement())
+  phone String @db.VarChar(30)
+}
+
+model job_titles {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(30)
+}
+
+model colors_setting {
+  id         Int    @id @default(autoincrement())
+  main_color String @unique @db.VarChar(20)
+  color1     String @unique @db.VarChar(20)
+  color2     String @unique @db.VarChar(20)
+}
+
+model Awner {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Awner_info {
+  id          Int    @id @default(autoincrement())
+  name        String @unique @db.VarChar(30)
+  email       String @unique @db.VarChar(40)
+  description String @unique @db.VarChar(255)
+  image       String @unique @db.VarChar(255)
+}
+
+model Category_projects {
+  id            Int        @id @default(autoincrement())
+  category_name String     @unique @db.VarChar(60)
+  Projects      Projects[]
+}
+
+model Category_skills {
+  id            Int      @id @default(autoincrement())
+  category_name String   @unique @db.VarChar(50)
+  Skills        Skills[]
+}
+
+model Links {
+  id    Int    @id @default(autoincrement())
+  title String @unique @db.VarChar(30)
+  link  String @unique @db.VarChar(255)
+  icon  String @db.VarChar(255)
+  type  String @db.VarChar(40)
+}
+
+model Messages {
+  id         Int     @id @default(autoincrement())
+  subject    String  @db.VarChar(70)
+  message    String  @db.VarChar(255)
+  visitor_id String
+  Visitor    Visitor @relation(fields: [visitor_id], references: [id])
+
+  @@index([visitor_id], map: "Messages_visitor_id_fkey")
+}
+
+model Project_notes {
+  id         Int      @id @default(autoincrement())
+  notes      String   @db.VarChar(255)
+  react      String   @db.VarChar(10)
+  project_id Int
+  visitor_id String
+  Projects   Projects @relation(fields: [project_id], references: [id])
+  Visitor    Visitor  @relation(fields: [visitor_id], references: [id])
+
+  @@index([project_id], map: "Project_notes_project_id_fkey")
+  @@index([visitor_id], map: "Project_notes_visitor_id_fkey")
+}
+
+model Projects {
+  id                  Int               @id @default(autoincrement())
+  title               String            @db.VarChar(30)
+  description         String            @db.VarChar(255)
+  live_url            String            @db.VarChar(255)
+  repo_url            String            @db.VarChar(255)
+  status              String            @db.VarChar(20)
+  created_at          DateTime          @default(now())
+  ended_at            String            @db.VarChar(30)
+  attachment          String            @db.VarChar(255)
+  category_project_id Int
+  Project_notes       Project_notes[]
+  Category_projects   Category_projects @relation(fields: [category_project_id], references: [id])
+
+  @@index([category_project_id], map: "Projects_category_project_id_fkey")
+}
+
+model Skills {
+  id              Int             @id @default(autoincrement())
+  title           String          @db.VarChar(20)
+  icon            String          @db.VarChar(255)
+  category_id     Int
+  Category_skills Category_skills @relation(fields: [category_id], references: [id])
+
+  @@index([category_id], map: "Skills_category_id_fkey")
+}
+
+model Visitor {
+  id            String          @id
+  name          String          @db.VarChar(30)
+  email         String          @db.VarChar(40)
+  image         String          @db.VarChar(255)
+  login_by      String          @db.VarChar(20)
+  Messages      Messages[]
+  Project_notes Project_notes[]
+}

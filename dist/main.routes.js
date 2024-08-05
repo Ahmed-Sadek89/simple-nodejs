@@ -4,12 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
-app.get("/*", (req, res) => {
-    res.json({
-        message: "THIS SERVER IS OWNED BY /AHMED SADEK/"
-    });
-});
-app.listen(4000, () => {
-    console.log("SERVER IS WORKED ON PORT 4000");
-});
+const Awner_routes_1 = __importDefault(require("./routes/Awner.routes"));
+const root = (0, express_1.default)();
+root.use('/awner', Awner_routes_1.default);
+exports.default = root;
