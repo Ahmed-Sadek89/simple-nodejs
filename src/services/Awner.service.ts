@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client"
+import prisma from "../libs/prisma";
 import { BcryptService } from "./bcript.service";
 import { JWT } from "./JWT.service";
 
@@ -7,17 +7,15 @@ type payload = {
     password: string
 }
 export class AwnerServices {
-    private readonly prisma: PrismaClient;
     private readonly bcrypt: BcryptService;
     private readonly jwt: JWT;
     constructor() {
-        this.prisma = new PrismaClient();
         this.bcrypt = new BcryptService();
         this.jwt = new JWT()
     }
     async postAwnerService({ email, password }: payload) {
         const hashedPassword = await this.bcrypt.encryptPassword(password)
-        const awner = await this.prisma.awner.create({
+        const awner = await prisma.awner.create({
             data: {
                 email,
                 password: hashedPassword
@@ -27,12 +25,12 @@ export class AwnerServices {
     }
 
     async findAllAwnersService() {
-        const awners = await this.prisma.awner.findMany();
+        const awners = await prisma.awner.findMany();
         return awners
     }
 
     async findAwnerById(id: number) {
-        const awner = await this.prisma.awner.findUnique({
+        const awner = await prisma.awner.findUnique({
             where: {
                 id
             }
@@ -41,7 +39,7 @@ export class AwnerServices {
     }
 
     private async findAwnerByEmail(email: string) {
-        const awner = await this.prisma.awner.findUnique({
+        const awner = await prisma.awner.findUnique({
             where: {
                 email
             }
@@ -77,11 +75,11 @@ export class AwnerServices {
     }
 
     async deleteAllAwnersService() {
-        return await this.prisma.awner.deleteMany()
+        return await prisma.awner.deleteMany()
     }
 
     async deleteAwnerByIdService(id: number) {
-        return await this.prisma.awner.delete({
+        return await prisma.awner.delete({
             where: {
                 id
             }
@@ -90,7 +88,7 @@ export class AwnerServices {
 
     async updateAwnerByIdService(id: number, data: { email: string, password: string }) {
         const hashedPassword = await this.bcrypt.encryptPassword(data.password)
-        return await this.prisma.awner.update({
+        return await prisma.awner.update({
             where: { id },
             data: {
                 email: data.email,

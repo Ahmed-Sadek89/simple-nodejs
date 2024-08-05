@@ -11,5 +11,9 @@
             "src": "/(.*)",
             "dest": "dist/index.js"
         }
-    ]
+    ],
+    "regions": [
+        "iad1"
+    ],
+    "public": false
 }

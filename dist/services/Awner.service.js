@@ -8,21 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AwnerServices = void 0;
-const client_1 = require("@prisma/client");
+const prisma_1 = __importDefault(require("../libs/prisma"));
 const bcript_service_1 = require("./bcript.service");
 const JWT_service_1 = require("./JWT.service");
 class AwnerServices {
     constructor() {
-        this.prisma = new client_1.PrismaClient();
         this.bcrypt = new bcript_service_1.BcryptService();
         this.jwt = new JWT_service_1.JWT();
     }
     postAwnerService(_a) {
         return __awaiter(this, arguments, void 0, function* ({ email, password }) {
             const hashedPassword = yield this.bcrypt.encryptPassword(password);
-            const awner = yield this.prisma.awner.create({
+            const awner = yield prisma_1.default.awner.create({
                 data: {
                     email,
                     password: hashedPassword
@@ -33,13 +35,13 @@ class AwnerServices {
     }
     findAllAwnersService() {
         return __awaiter(this, void 0, void 0, function* () {
-            const awners = yield this.prisma.awner.findMany();
+            const awners = yield prisma_1.default.awner.findMany();
             return awners;
         });
     }
     findAwnerById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const awner = yield this.prisma.awner.findUnique({
+            const awner = yield prisma_1.default.awner.findUnique({
                 where: {
                     id
                 }
@@ -49,7 +51,7 @@ class AwnerServices {
     }
     findAwnerByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const awner = yield this.prisma.awner.findUnique({
+            const awner = yield prisma_1.default.awner.findUnique({
                 where: {
                     email
                 }
@@ -85,12 +87,12 @@ class AwnerServices {
     }
     deleteAllAwnersService() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.prisma.awner.deleteMany();
+            return yield prisma_1.default.awner.deleteMany();
         });
     }
     deleteAwnerByIdService(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.prisma.awner.delete({
+            return yield prisma_1.default.awner.delete({
                 where: {
                     id
                 }
@@ -100,7 +102,7 @@ class AwnerServices {
     updateAwnerByIdService(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashedPassword = yield this.bcrypt.encryptPassword(data.password);
-            return yield this.prisma.awner.update({
+            return yield prisma_1.default.awner.update({
                 where: { id },
                 data: {
                     email: data.email,
