@@ -1,26 +1,28 @@
-import express, { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import root from './main.routes'
+
+dotenv.config()
 
 const app = express();
-const prisma = new PrismaClient();
 
-app.use(express.json());
+app.use(express.json())
 
-app.get("/", async (req: Request, res: Response) => {
-    res.send("Hello World!");
-});
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/users", async (req: Request, res: Response) => {
-    try {
-        const users = await prisma.awner.findMany();
-        res.json(users);
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.use(cors());
+
+app.get('/', (_, res) => {
+    res.status(200).json({
+        status: 200,
+        message: "welcome to Nodejs server"
+    })
+})
+
+app.use("/api", root)
+
+app.listen(process.env.PORT || 5000, () => {
+    console.log(`SERVER IS WORKED ON PORT ${process.env.PORT}`)
+})

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -63,9 +63,9 @@ model messages {
   subject    String  @db.VarChar(70)
   message    String  @db.VarChar(255)
   visitor_id String
-  visitor    visitor @relation(fields: [visitor_id], references: [id], map: "Messages_visitor_id_fkey")
+  visitor    visitor @relation(fields: [visitor_id], references: [id])
 
-  @@index([visitor_id], map: "Messages_visitor_id_fkey")
+  @@index([visitor_id])
 }
 
 model project_notes {
@@ -74,10 +74,10 @@ model project_notes {
   react      String   @db.VarChar(10)
   project_id Int
   visitor_id String
-  projects   projects @relation(fields: [project_id], references: [id], map: "Project_notes_project_id_fkey")
-  visitor    visitor  @relation(fields: [visitor_id], references: [id], map: "Project_notes_visitor_id_fkey")
+  projects   projects @relation(fields: [project_id], references: [id])
+  visitor    visitor  @relation(fields: [visitor_id], references: [id])
 
-  @@index([project_id], map: "Project_notes_project_id_fkey")
+  @@index([project_id])
   @@index([visitor_id], map: "Project_notes_visitor_id_fkey")
 }
 
@@ -93,9 +93,9 @@ model projects {
   attachment          String            @db.VarChar(255)
   category_project_id Int
   project_notes       project_notes[]
-  category_projects   category_projects @relation(fields: [category_project_id], references: [id], map: "Projects_category_project_id_fkey")
+  category_projects   category_projects @relation(fields: [category_project_id], references: [id])
 
-  @@index([category_project_id], map: "Projects_category_project_id_fkey")
+  @@index([category_project_id])
 }
 
 model skills {
@@ -103,9 +103,9 @@ model skills {
   title           String          @db.VarChar(20)
   icon            String          @db.VarChar(255)
   category_id     Int
-  category_skills category_skills @relation(fields: [category_id], references: [id], map: "Skills_category_id_fkey")
+  category_skills category_skills @relation(fields: [category_id], references: [id])
 
-  @@index([category_id], map: "Skills_category_id_fkey")
+  @@index([category_id])
 }
 
 model visitor {
