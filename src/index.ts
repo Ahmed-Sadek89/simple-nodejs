@@ -21,7 +21,7 @@ app.get('/', (_, res) => {
     })
 })
 
-// app.use("/api", root)
+app.use("/api", root)
 
 app.listen(process.env.PORT || 5000, () => {
     console.log(`SERVER IS WORKED ON PORT ${process.env.PORT}`)
