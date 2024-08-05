@@ -19,8 +19,8 @@ class AwnerServices {
         this.bcrypt = new bcript_service_1.BcryptService();
         this.jwt = new JWT_service_1.JWT();
     }
-    postAwnerService({ email, password }) {
-        return __awaiter(this, void 0, void 0, function* () {
+    postAwnerService(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ email, password }) {
             const hashedPassword = yield this.bcrypt.encryptPassword(password);
             const awner = yield this.prisma.awner.create({
                 data: {
@@ -71,8 +71,8 @@ class AwnerServices {
             return null;
         });
     }
-    checkIsAwner({ email, password }) {
-        return __awaiter(this, void 0, void 0, function* () {
+    checkIsAwner(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ email, password }) {
             const awner = yield this.findAwnerByEmail(email);
             if (awner) {
                 const checkPassword = yield this.bcrypt.comparingPassword(password, awner.password);
